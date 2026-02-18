@@ -2,13 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { useSearchParams } from "react-router";
 import { useChatContext } from "stream-chat-react";
+import PropTypes from "prop-types";
 
 import * as Sentry from "@sentry/react";
 import { CircleIcon } from "lucide-react";
 
 const UsersList = ({ activeChannel }) => {
   const { client } = useChatContext();
-  const [_, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
 
   const fetchUsers = useCallback(async () => {
     if (!client?.user) return;
@@ -44,21 +45,21 @@ const UsersList = ({ activeChannel }) => {
 
     try {
       //  bc stream does not allow channelId to be longer than 64 chars
-      const channelId = [client.user.id, targetUser.id].sort().join("-").slice(0, 64);
+      const channelId = [client.user.id, targetUser.id].sort((a, b) => a.localeCompare(b)).join("-").slice(0, 64);
       const channel = client.channel("messaging", channelId, {
         members: [client.user.id, targetUser.id],
       });
       await channel.watch();
       setSearchParams({ channel: channel.id });
     } catch (error) {
-      console.log("Error creating DM", error),
-        Sentry.captureException(error, {
-          tags: { component: "UsersList" },
-          extra: {
-            context: "create_direct_message",
-            targetUserId: targetUser?.id,
-          },
-        });
+      console.log("Error creating DM", error);
+      Sentry.captureException(error, {
+        tags: { component: "UsersList" },
+        extra: {
+          context: "create_direct_message",
+          targetUserId: targetUser?.id,
+        },
+      });
     }
   };
 
@@ -69,12 +70,12 @@ const UsersList = ({ activeChannel }) => {
   return (
     <div className="team-channel-list__users">
       {users.map((user) => {
-        const channelId = [client.user.id, user.id].sort().join("-").slice(0, 64);
+        const channelId = [client.user.id, user.id].sort((a, b) => a.localeCompare(b)).join("-").slice(0, 64);
         const channel = client.channel("messaging", channelId, {
           members: [client.user.id, user.id],
         });
         const unreadCount = channel.countUnread();
-        const isActive = activeChannel && activeChannel.id === channelId;
+        const isActive = activeChannel?.id === channelId;
 
         return (
           <button
@@ -122,6 +123,12 @@ const UsersList = ({ activeChannel }) => {
       })}
     </div>
   );
+};
+
+UsersList.propTypes = {
+  activeChannel: PropTypes.shape({
+    id: PropTypes.string,
+  }),
 };
 
 export default UsersList;
