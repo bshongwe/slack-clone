@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 import { useChatContext } from "stream-chat-react";
+import PropTypes from "prop-types";
 import * as Sentry from "@sentry/react";
 import toast from "react-hot-toast";
 import { AlertCircleIcon, HashIcon, LockIcon, UsersIcon, XIcon } from "lucide-react";
@@ -305,6 +306,10 @@ const CreateChannelModal = ({ onClose }) => {
       </div>
     </div>
   );
+};
+
+CreateChannelModal.propTypes = {
+  onClose: PropTypes.func.isRequired,
 };
 
 export default CreateChannelModal;
