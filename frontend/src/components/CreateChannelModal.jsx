@@ -87,6 +87,47 @@ const CreateChannelModal = ({ onClose }) => {
     }
   };
 
+  const renderUserAvatar = (user) => {
+    if (user.image) {
+      return (
+        <img
+          src={user.image}
+          alt={user.name || user.id}
+          className="member-avatar"
+        />
+      );
+    }
+
+    return (
+      <div className="member-avatar member-avatar-placeholder">
+        <span>{(user.name || user.id).charAt(0).toUpperCase()}</span>
+      </div>
+    );
+  };
+
+  const renderMembersList = () => {
+    if (loadingUsers) {
+      return <p>Loading users...</p>;
+    }
+
+    if (users.length === 0) {
+      return <p>No users found</p>;
+    }
+
+    return users.map((user) => (
+      <label key={user.id} className="member-item">
+        <input
+          type="checkbox"
+          checked={selectedMembers.includes(user.id)}
+          onChange={() => handleMemberToggle(user.id)}
+          className="member-checkbox"
+        />
+        {renderUserAvatar(user)}
+        <span className="member-name">{user.name || user.id}</span>
+      </label>
+    ));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationError = validateChannelName(channelName);
@@ -243,36 +284,7 @@ const CreateChannelModal = ({ onClose }) => {
                 <span className="selected-count">{selectedMembers.length} selected</span>
               </div>
 
-              <div className="members-list">
-                {loadingUsers ? (
-                  <p>Loading users...</p>
-                ) : users.length === 0 ? (
-                  <p>No users found</p>
-                ) : (
-                  users.map((user) => (
-                    <label key={user.id} className="member-item">
-                      <input
-                        type="checkbox"
-                        checked={selectedMembers.includes(user.id)}
-                        onChange={() => handleMemberToggle(user.id)}
-                        className="member-checkbox"
-                      />
-                      {user.image ? (
-                        <img
-                          src={user.image}
-                          alt={user.name || user.id}
-                          className="member-avatar"
-                        />
-                      ) : (
-                        <div className="member-avatar member-avatar-placeholder">
-                          <span>{(user.name || user.id).charAt(0).toUpperCase()}</span>
-                        </div>
-                      )}
-                      <span className="member-name">{user.name || user.id}</span>
-                    </label>
-                  ))
-                )}
-              </div>
+              <div className="members-list">{renderMembersList()}</div>
             </div>
           )}
 
