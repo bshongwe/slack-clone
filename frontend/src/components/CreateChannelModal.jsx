@@ -181,8 +181,8 @@ const CreateChannelModal = ({ onClose }) => {
                 Channel ID will be: #
                 {channelName
                   .toLowerCase()
-                  .replace(/\s+/g, "-")
-                  .replace(/[^a-z0-9-_]/g, "")}
+                  .replaceAll(/\s+/g, "-")
+                  .replaceAll(/[^a-z0-9-_]/g, "")}
               </div>
             )}
           </div>
