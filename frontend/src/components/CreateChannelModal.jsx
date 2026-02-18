@@ -230,9 +230,9 @@ const CreateChannelModal = ({ onClose }) => {
 
           {/* CHANNEL TYPE */}
           <div className="form-group">
-            <label>Channel type</label>
+            <label htmlFor="channel-type">Channel type</label>
 
-            <div className="radio-group">
+            <div id="channel-type" className="radio-group">
               <label className="radio-option">
                 <input
                   type="radio"
@@ -270,7 +270,7 @@ const CreateChannelModal = ({ onClose }) => {
           {/* add members component */}
           {channelType === "private" && (
             <div className="form-group">
-              <label>Add members</label>
+              <label htmlFor="members-list">Add members</label>
               <div className="member-selection-header">
                 <button
                   type="button"
@@ -284,7 +284,7 @@ const CreateChannelModal = ({ onClose }) => {
                 <span className="selected-count">{selectedMembers.length} selected</span>
               </div>
 
-              <div className="members-list">{renderMembersList()}</div>
+              <div id="members-list" className="members-list">{renderMembersList()}</div>
             </div>
           )}
 
