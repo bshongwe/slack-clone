@@ -15,7 +15,7 @@ const CreateChannelModal = ({ onClose }) => {
   const [users, setUsers] = useState([]);
   const [selectedMembers, setSelectedMembers] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
-  const [_, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
 
   const { client, setActiveChannel } = useChatContext();
 
