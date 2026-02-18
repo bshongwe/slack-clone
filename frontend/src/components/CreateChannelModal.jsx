@@ -102,8 +102,8 @@ const CreateChannelModal = ({ onClose }) => {
       const channelId = channelName
         .toLowerCase()
         .trim()
-        .replace(/\s+/g, "-")
-        .replace(/[^a-z0-9-_]/g, "")
+        .replaceAll(/\s+/g, "-")
+        .replaceAll(/[^a-z0-9-_]/g, "")
         .slice(0, 20);
 
       // prepare the channel data
